@@ -39,7 +39,7 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: whatsapp-for-linux-${{ github.ref_name }}
+          name: whatsapp-for-linux-${{ replace(github.ref_name, '/', '-') }}
           path: |
             dist/*.rpm
             dist/*.AppImage
