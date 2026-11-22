@@ -59,10 +59,10 @@
       "executableName": "whatsapp-for-linux",
       "maintainer": "japsaini0 <254399768+japsaini0@users.noreply.github.com>",
       "synopsis": "WhatsApp for Linux",
-      "description": "WhatsApp Web in a native Linux desktop app with tray, notifications, shortcuts and local-only data.",
-      "rpm": {
-        "name": "whatsapp-for-linux"
-      }
+      "description": "WhatsApp Web in a native Linux desktop app with tray, notifications, shortcuts and local-only data."
+    },
+    "rpm": {
+      "packageName": "whatsapp-for-linux"
     }
   }
 }
