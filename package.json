@@ -18,9 +18,9 @@
   "scripts": {
     "start": "electron .",
     "icon": "node tools/make-icons.js",
-    "dist": "npm run icon && electron-builder --linux",
-    "dist:rpm": "npm run icon && electron-builder --linux rpm",
-    "dist:appimage": "npm run icon && electron-builder --linux AppImage"
+    "dist": "npm run icon && electron-builder --linux --publish never",
+    "dist:rpm": "npm run icon && electron-builder --linux rpm --publish never",
+    "dist:appimage": "npm run icon && electron-builder --linux AppImage --publish never"
   },
   "devDependencies": {
     "electron": "^45.0.0",
@@ -30,7 +30,7 @@
   "build": {
     "appId": "com.github.japsaini0.whatsapp-for-linux",
     "productName": "WhatsApp for Linux",
-    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "artifactName": "WhatsApp-for-Linux-${version}-${arch}.${ext}",
     "files": [
       "src/**/*",
       "package.json",
@@ -59,10 +59,12 @@
       "executableName": "whatsapp-for-linux",
       "maintainer": "japsaini0 <254399768+japsaini0@users.noreply.github.com>",
       "synopsis": "WhatsApp for Linux",
-      "description": "WhatsApp Web in a native Linux desktop app with tray, notifications, shortcuts and local-only data."
+      "description": "WhatsApp Web in a native Linux desktop app with tray, notifications, shortcuts and local-only data.",
+      "syncDesktopName": true
     },
     "rpm": {
       "packageName": "whatsapp-for-linux"
     }
-  }
+  },
+  "desktopName": "whatsapp-for-linux.desktop"
 }
