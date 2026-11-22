@@ -141,6 +141,15 @@ system notification is duplicated.
   converted to `hide()`. Disable in Settings.
 - **Single-instance lock**: a second launch focuses the existing window.
 - **Tray menu**: Show/hide · Settings · Quit. Double-click restores.
+- **Icon in the overview / window list (v1.0.2 fix).** GNOME shows the icon
+  from the installed `.desktop` file, matched to the window via
+  `WM_CLASS` ↔ `StartupWMClass`. Electron's default WM_CLASS didn't always
+  match, so GNOME fell back to a generic icon. The app now forces
+  `app.commandLine.appendSwitch('class', 'whatsapp-for-linux')` before
+  creating any window, which pins WM_CLASS to the same value the packaged
+  `.desktop` entry uses (`syncDesktopName` + `desktopName`). A fresh install
+  may still show the fallback until you log out and back in (GNOME's icon
+  cache refreshes at login).
 - If the tray could not be created (e.g. headless session), the app quits
   when the last window closes, like a normal app.
 - **GNOME note**: GNOME Shell hides classic tray icons — enable the
@@ -305,6 +314,7 @@ git push origin v1.0.1        # CI builds both packages + publishes the release
 |---|---|---|
 | v1.0.0 | 2026-11-22 | Initial release: full feature set, RPM + AppImage, CI |
 | v1.0.1 | 2026-11-22 | **Fix:** stock Chrome User-Agent (drop the `Electron/…` token) so WhatsApp Web no longer shows the "Chrome 100+" wall — see §2.3 |
+| v1.0.2 | 2026-11-22 | **Fix:** pin `WM_CLASS` to `whatsapp-for-linux` (Chromium `--class` switch) so GNOME's overview/window-list matches the installed `.desktop` entry and shows the app icon instead of a generic one — see §2.5 |
 
 ### 3.7 Pitfalls we hit (so you don't have to)
 
