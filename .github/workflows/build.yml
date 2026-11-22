@@ -1,0 +1,68 @@
+name: Build & Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Linux packaging tools (rpmbuild for the RPM target)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends rpm xz-utils
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build RPM + AppImage
+        run: npm run dist
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: whatsapp-for-linux-${{ github.ref_name }}
+          path: |
+            dist/*.rpm
+            dist/*.AppImage
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.rpm
+            dist/*.AppImage
+        body: |
+          ## WhatsApp for Linux
+
+          **Install on Fedora / any RPM distro:**
+          ```
+          sudo dnf install WhatsApp-for-Linux-*.rpm
+          ```
+
+          **Or use the portable AppImage:**
+          ```
+          chmod +x WhatsApp-for-Linux-*.AppImage
+          ./WhatsApp-for-Linux-*.AppImage
+          ```
+
+          First launch: open the app, then on your phone go to
+          *WhatsApp → Settings → Linked devices → Link a device* and scan the QR code.
+
+          See the README for full documentation, privacy notes and uninstall instructions.

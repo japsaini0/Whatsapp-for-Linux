@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'" />
+  <title>Settings — WhatsApp for Linux</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: #111b21;
+      color: #e9edef;
+    }
+    .wrap { max-width: 440px; margin: 0 auto; padding: 24px 20px 40px; }
+    h1 { font-size: 20px; margin: 0 0 4px; color: #fff; }
+    .sub { color: #8696a0; font-size: 13px; margin-bottom: 20px; }
+    section { background: #202c33; border-radius: 10px; padding: 4px 14px; margin-bottom: 14px; }
+    section h2 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #8696a0;
+      margin: 10px 0 4px;
+    }
+    label.row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #2a3942;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    label.row:last-of-type { border-bottom: none; }
+    label.row .desc { display: block; color: #8696a0; font-size: 12px; margin-top: 2px; }
+    input[type='checkbox'] { width: 18px; height: 18px; accent-color: #00a884; flex: none; }
+    button {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 8px;
+      border: 1px solid #2a3942;
+      background: #2a3942;
+      color: #e9edef;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button:hover { background: #324450; }
+    button.danger { border-color: #7a2e2e; background: #3a2224; color: #f0b9b9; }
+    button.danger:hover { background: #4a2a2c; }
+    .footer { color: #8696a0; font-size: 12px; margin-top: 18px; line-height: 1.5; word-break: break-word; }
+    code { color: #e9edef; font-size: 11px; }
+    .status { min-height: 16px; color: #00a884; font-size: 12px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Settings</h1>
+    <div class="sub">WhatsApp for Linux · v<span id="version">…</span></div>
+
+    <section>
+      <h2>General</h2>
+      <label class="row">
+        <span>Start at login
+          <span class="desc">Launches the app automatically when you log in to your desktop.</span>
+        </span>
+        <input type="checkbox" id="autostart" />
+      </label>
+      <label class="row">
+        <span>Close to tray
+          <span class="desc">Clicking the window’s X hides the app in the system tray instead of quitting.</span>
+        </span>
+        <input type="checkbox" id="closeToTray" />
+      </label>
+      <label class="row">
+        <span>Spell check
+          <span class="desc">Underlines typos in the messages you type (English).</span>
+        </span>
+        <input type="checkbox" id="spellcheck" />
+      </label>
+    </section>
+
+    <section>
+      <h2>Notifications &amp; downloads</h2>
+      <label class="row">
+        <span>Notification sound
+          <span class="desc">Plays a sound for new-message notifications.</span>
+        </span>
+        <input type="checkbox" id="notifySound" />
+      </label>
+      <label class="row">
+        <span>Ask where to save media
+          <span class="desc">Off = downloads go straight to Downloads/WhatsApp. On = you pick a folder each time.</span>
+        </span>
+        <input type="checkbox" id="downloadsAsk" />
+      </label>
+      <button id="openDownloads">Open Downloads folder</button>
+    </section>
+
+    <section>
+      <h2>WhatsApp Web</h2>
+      <button id="reload">Reload WhatsApp</button>
+      <button id="clearData" class="danger">Clear all local data &amp; sign out</button>
+      <div class="status" id="status"></div>
+    </section>
+
+    <div class="footer">
+      <div>Your session and chats are stored only on this machine, in:</div>
+      <div style="margin: 4px 0 10px"><code id="dataDir">…</code></div>
+      <button id="openDataDir">Open data folder</button>
+      <div style="margin-top: 14px">
+        No telemetry, no analytics, no external calls except to
+        web.whatsapp.com. Messages are end-to-end encrypted by WhatsApp,
+        exactly like WhatsApp Web.
+      </div>
+    </div>
+  </div>
+  <script src="settings.js"></script>
+</body>
+</html>

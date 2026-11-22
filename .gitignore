@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Build output (installers, packaged app)
+dist/
+
+# Stray artifacts
+*.rpm
+*.AppImage
+*.log
+.DS_Store

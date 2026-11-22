@@ -1,0 +1,68 @@
+{
+  "name": "whatsapp-for-linux",
+  "productName": "WhatsApp for Linux",
+  "version": "1.0.0",
+  "description": "WhatsApp Web in a native-feeling Linux desktop app: system tray, native notifications, keyboard shortcuts, autostart, local-only data. Built for Fedora, runs on most Linux distros.",
+  "main": "src/main/index.js",
+  "author": "japsaini0",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://github.com/japsaini0/Whatsapp-for-Linux",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/japsaini0/Whatsapp-for-Linux.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "electron .",
+    "icon": "node tools/make-icons.js",
+    "dist": "npm run icon && electron-builder --linux",
+    "dist:rpm": "npm run icon && electron-builder --linux rpm",
+    "dist:appimage": "npm run icon && electron-builder --linux AppImage"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.0.0",
+    "sharp": "^0.35.5"
+  },
+  "build": {
+    "appId": "com.github.japsaini0.whatsapp-for-linux",
+    "productName": "WhatsApp for Linux",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "files": [
+      "src/**/*",
+      "package.json",
+      "LICENSE"
+    ],
+    "extraResources": [
+      {
+        "from": "build/icons",
+        "to": "icons",
+        "filter": [
+          "**/*.png"
+        ]
+      }
+    ],
+    "linux": {
+      "target": [
+        {
+          "target": "rpm"
+        },
+        {
+          "target": "AppImage"
+        }
+      ],
+      "category": "Network",
+      "icon": "build/icons/icon.png",
+      "executableName": "whatsapp-for-linux",
+      "maintainer": "japsaini0 <254399768+japsaini0@users.noreply.github.com>",
+      "synopsis": "WhatsApp for Linux",
+      "description": "WhatsApp Web in a native Linux desktop app with tray, notifications, shortcuts and local-only data.",
+      "rpm": {
+        "name": "whatsapp-for-linux"
+      }
+    }
+  }
+}
