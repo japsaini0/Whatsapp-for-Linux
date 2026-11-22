@@ -1,7 +1,7 @@
 {
   "name": "whatsapp-for-linux",
   "productName": "WhatsApp for Linux",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "WhatsApp Web in a native-feeling Linux desktop app: system tray, native notifications, keyboard shortcuts, autostart, local-only data. Built for Fedora, runs on most Linux distros.",
   "main": "src/main/index.js",
   "author": "japsaini0",

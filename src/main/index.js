@@ -35,6 +35,30 @@ const WHATSAPP_ORIGIN = 'https://web.whatsapp.com';
 const REPO_URL = 'https://github.com/japsaini0/Whatsapp-for-Linux';
 const PARTITION = 'persist:whatsapp';
 
+// ---------------------------------------------------------------------------
+// Browser identity
+//
+// Since ~Nov 2026, WhatsApp Web rejects any User-Agent that carries an extra
+// product token (such as Electron's default "Electron/45.4.1") and shows the
+// "WhatsApp works with Google Chrome 100+" wall instead of the QR screen.
+// We therefore present a stock Chrome User-Agent, keeping the *real* Chromium
+// version that ships with this Electron build.
+// ---------------------------------------------------------------------------
+
+const CHROME_VERSION = process.versions.chrome; // e.g. "148.0.7778.179"
+const WHATSAPP_USER_AGENT =
+  `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ` +
+  `Chrome/${CHROME_VERSION} Safari/537.36`;
+
+function applyBrowserIdentity() {
+  const ses = session.fromPartition(PARTITION);
+  ses.setUserAgent(WHATSAPP_USER_AGENT);
+  // Visible in the terminal when launched from a shell — handy for support.
+  console.log(
+    `[whatsapp-for-linux] Chromium ${CHROME_VERSION} · user agent:\n  ${WHATSAPP_USER_AGENT}`
+  );
+}
+
 let mainWindow = null;
 let settingsWindow = null;
 let tray = null;
@@ -382,7 +406,7 @@ function buildAppMenu() {
               title: 'About',
               message: 'WhatsApp for Linux',
               detail:
-                `Version ${app.getVersion()}\n\n` +
+                `Version ${app.getVersion()} · Chromium ${CHROME_VERSION}\n\n` +
                 'WhatsApp Web in a native Linux desktop app.\n' +
                 'No telemetry. Your data stays on this machine.\n\n' +
                 `GitHub: ${REPO_URL}`,
@@ -407,6 +431,10 @@ if (!gotLock) {
 
   app.whenReady().then(() => {
     app.setName('WhatsApp for Linux');
+
+    // Must run before the first navigation so the very first request to
+    // web.whatsapp.com already carries the Chrome-compatible identity.
+    applyBrowserIdentity();
 
     settings.register({
       getMainWindow: () => mainWindow,
