@@ -48,21 +48,4 @@ jobs:
           files: |
             dist/*.rpm
             dist/*.AppImage
-        body: |
-          ## WhatsApp for Linux
-
-          **Install on Fedora / any RPM distro:**
-          ```
-          sudo dnf install WhatsApp-for-Linux-*.rpm
-          ```
-
-          **Or use the portable AppImage:**
-          ```
-          chmod +x WhatsApp-for-Linux-*.AppImage
-          ./WhatsApp-for-Linux-*.AppImage
-          ```
-
-          First launch: open the app, then on your phone go to
-          *WhatsApp → Settings → Linked devices → Link a device* and scan the QR code.
-
-          See the README for full documentation, privacy notes and uninstall instructions.
+          body: "## WhatsApp for Linux\n\n**Install on Fedora / any RPM distro:**\n\n```\nsudo dnf install WhatsApp-for-Linux-*.rpm\n```\n\n**Or use the portable AppImage:**\n\n```\nchmod +x WhatsApp-for-Linux-*.AppImage\n./WhatsApp-for-Linux-*.AppImage\n```\n\nFirst launch: open the app, then on your phone go to WhatsApp → Settings → Linked devices → Link a device and scan the QR code.\n\nSee the README for full documentation, privacy notes and uninstall instructions."
