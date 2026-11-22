@@ -192,6 +192,13 @@ product token (such as the `Electron/…` token Electron sends by default).
 **v1.0.1 fixes this** by presenting a stock Chrome User-Agent with the real
 bundled Chromium version. If you're on 1.0.0, update to 1.0.1 or newer.
 
+**The overview / window list shows a different (generic) icon.**
+GNOME picks that icon from the installed `.desktop` file, matched to the
+window via WM_CLASS. **v1.0.2 fixes this** by pinning WM_CLASS to
+`whatsapp-for-linux` so the match always succeeds. On a freshly installed
+1.0.0/1.0.1, logging out and back in usually makes the correct icon appear
+(GNOME refreshes its icon cache at login).
+
 **Do calls and video work?** Yes — WhatsApp Web calls run over WebRTC in
 Chromium, which handles them in the desktop window.
 

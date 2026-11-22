@@ -36,6 +36,19 @@ const REPO_URL = 'https://github.com/japsaini0/Whatsapp-for-Linux';
 const PARTITION = 'persist:whatsapp';
 
 // ---------------------------------------------------------------------------
+// Window class (WM_CLASS)
+//
+// GNOME's overview / window list picks the window icon from the installed
+// .desktop file, matched via WM_CLASS ↔ StartupWMClass. The installed
+// desktop entry (syncDesktopName) uses StartupWMClass=whatsapp-for-linux, so
+// pin WM_CLASS to the same value — otherwise Electron's default class may not
+// match and GNOME falls back to a generic/wrong icon.
+// Must run before the app creates any window.
+// ---------------------------------------------------------------------------
+
+app.commandLine.appendSwitch('class', 'whatsapp-for-linux');
+
+// ---------------------------------------------------------------------------
 // Browser identity
 //
 // Since ~Nov 2026, WhatsApp Web rejects any User-Agent that carries an extra
