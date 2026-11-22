@@ -181,6 +181,12 @@ git push origin v1.0.1
 
 ## FAQ
 
+**I see a "WhatsApp works with Google Chrome 100+" wall instead of the QR code.**
+Since ~Nov 2026, WhatsApp Web rejects any User-Agent that carries an extra
+product token (such as the `Electron/…` token Electron sends by default).
+**v1.0.1 fixes this** by presenting a stock Chrome User-Agent with the real
+bundled Chromium version. If you're on 1.0.0, update to 1.0.1 or newer.
+
 **Do calls and video work?** Yes — WhatsApp Web calls run over WebRTC in
 Chromium, which handles them in the desktop window.
 
