@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   build:
@@ -19,7 +20,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install Linux packaging tools (rpmbuild for the RPM target)
@@ -31,7 +32,9 @@ jobs:
         run: npm ci
 
       - name: Build RPM + AppImage
-        run: npm run dist
+        run: |
+          set -o pipefail
+          npm run dist 2>&1 | tee build.log
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -40,6 +43,26 @@ jobs:
           path: |
             dist/*.rpm
             dist/*.AppImage
+
+      - name: Post failure log to an issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BODY=$(mktemp)
+          {
+            echo "Automated failure report from the Build & Release workflow (run ${{ github.run_id }})."
+            echo
+            echo "Ref: ${{ github.ref_name }}"
+            echo
+            echo '## `npm run dist` output (tail)'
+            echo '```'
+            tail -c 60000 build.log 2>/dev/null || echo '(no build.log)'
+            echo '```'
+          } > "$BODY"
+          gh issue create \
+            --title "Build & Release failure log — run ${{ github.run_id }}" \
+            --body-file "$BODY" || true
 
       - name: Publish GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
