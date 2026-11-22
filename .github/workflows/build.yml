@@ -1,0 +1,74 @@
+name: Build & Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Linux packaging tools (rpmbuild for the RPM target)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends rpm xz-utils
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build RPM + AppImage
+        run: |
+          set -o pipefail
+          npm run dist 2>&1 | tee build.log
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: whatsapp-for-linux
+          path: |
+            dist/*.rpm
+            dist/*.AppImage
+
+      - name: Post failure log to an issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BODY=$(mktemp)
+          {
+            echo "Automated failure report from the Build & Release workflow (run ${{ github.run_id }})."
+            echo
+            echo "Ref: ${{ github.ref_name }}"
+            echo
+            echo '## `npm run dist` output (tail)'
+            echo '```'
+            tail -c 60000 build.log 2>/dev/null || echo '(no build.log)'
+            echo '```'
+          } > "$BODY"
+          gh issue create \
+            --title "Build & Release failure log — run ${{ github.run_id }}" \
+            --body-file "$BODY" || true
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.rpm
+            dist/*.AppImage
+          body: "## WhatsApp for Linux\n\n**Install on Fedora / any RPM distro:**\n\n```\nsudo dnf install WhatsApp-for-Linux-*.rpm\n```\n\n**Or use the portable AppImage:**\n\n```\nchmod +x WhatsApp-for-Linux-*.AppImage\n./WhatsApp-for-Linux-*.AppImage\n```\n\nFirst launch: open the app, then on your phone go to WhatsApp → Settings → Linked devices → Link a device and scan the QR code.\n\nSee the README for full documentation, privacy notes and uninstall instructions."
