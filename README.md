@@ -100,6 +100,11 @@ works fully — it just quits when you close the window (or disable
   <https://github.com/japsaini0/Whatsapp-for-Linux/releases>.
 - **Build it yourself:** see *Building from source* below.
 
+> 🔧 **For developers:** see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) —
+> full breakdown of how the app works (process model, notifications, session
+> persistence, the v1.0.1 user-agent fix) and how it was built (toolchain,
+> packaging pipeline, CI/CD, pitfalls).
+
 ## How it works (in one paragraph)
 
 The app is an Electron (Chromium) window pointed at `https://web.whatsapp.com`,
@@ -227,6 +232,8 @@ build/
   icons/              # generated PNGs (committed so builds work without sharp)
 tools/
   make-icons.js
+docs/
+  ARCHITECTURE.md     # how it works + how it was built (developer docs)
 .github/workflows/build.yml   # CI: RPM + AppImage on tags
 ```
 
